@@ -29,8 +29,7 @@ dataset on Kaggle.
 We used the ImageDataGenerator from Keras to organize and resize the data for
 use in our models.
 
-'''
-{
+
 
     from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
@@ -59,8 +58,7 @@ use in our models.
                                                    shuffle=False,
                                                    class_mode='binary')
                                                    
-}
-'''
+
 
 With this, we can pass image data to our models as batches of (224,224,3) arrays.
 
@@ -83,8 +81,7 @@ Let's get on to the models, then!
 As mentioned earlier, we're using Keras to build our neural networks, so we'll
 need to make a few imports to have the necessary tools.
 
-'''
-{
+
 
     from tensorflow.keras.models import *
     from tensorflow.keras.layers import *
@@ -92,16 +89,14 @@ need to make a few imports to have the necessary tools.
 
     from sklearn.metrics import confusion_matrix, classification_report
     
-}
-'''
+
 
 These models can be time-intensive, so it's in our best interest to use the
 callbacks. These will stop our training early when the model stops improving
 and will also save the weights from the model with the best loss metric on the
 validation set.
 
-'''
-{
+
 
     def init_callbacks():
         early_stopping = EarlyStopping(monitor='val_loss', patience=5)
@@ -111,13 +106,11 @@ validation set.
         callbacks = [early stopping, model_checkpoint]
         return callbacks
         
-}
-'''
+
 
 Our first model is shallow: one hidden dense layer with 128 nodes.
 
-'''
-{
+
 
     model_1 = Sequential()
     model_1.add(Flatten(input_shape=(224,224,3)))
@@ -129,19 +122,17 @@ Our first model is shallow: one hidden dense layer with 128 nodes.
                    metrics=['accuracy'])
     model_1.summary()
     
-}
-'''
+
 
 ![model1_plot](./images/model1_plot.png)
 
-![model1_cr](./images/model1_cr.png)
+![model1_cr](./images/model1_cr.PNG)
 
 Our first model is promising, with 86% accuracy and 91% positive recall.
 
 Let's add a little depth to the model and see if we can improve these scores
 
-'''
-{
+
 
     model_2 = Sequential()
     model_2.add(Flatten(input_shape=(224,224,3)))
@@ -155,20 +146,17 @@ Let's add a little depth to the model and see if we can improve these scores
                     metrics=['accuracy'])
     model_2.summary()
     
-}
-'''
+
 
 ![model2_plot](./images/model2_plot.png)
 
-![model2_cr](./images/model2_cr.png)
+![model2_cr](./images/model2_cr.PNG)
 
 The added depth didn't help, reducing our accuracy to 84% and our positive
 recall to 90%
 
 Now we'll try a simple CNN.
 
-'''
-{
 
     model_3 = Sequential()
     model_3.add(Conv2D(128, kernel_size=3, activation='relu',
@@ -183,12 +171,10 @@ Now we'll try a simple CNN.
                   metrics=['accuracy'])
     model_3.summary()
     
-}
-'''
 
 ![cnn_plot](./images/cnn_plot.png)
 
-![model3_cr](./images/model3_cr.png)
+![model3_cr](./images/model3_cr.PNG)
 
 This dropped our accurcy further to 78%, but it might be worth it as
 positive recall improved to 97%.
@@ -196,8 +182,6 @@ positive recall improved to 97%.
 Let's add a little more complexity to our CNN and see if we can improve our
 results further.
 
-'''
-{
 
     model_4 = Sequential()
     model_4.add(Conv2D(32, kernel_size=(3,3), activation='relu',
@@ -219,8 +203,6 @@ results further.
 
     model_4.summary()
     
-}
-'''
 
 ![cnn2_plot](./images/cnn2_plot.png)
 
@@ -242,3 +224,8 @@ is an acceptable compromise given the problem at hand.
 
 ## Recommendations
 
+If trying to improve upon these results, I would recommend trying a larger
+dataset. This dataset is part of a larger dataset located [here](https://data.mendeley.com/datasets/rscbjbr9sj/3).
+It might also be worth your effort to build a custom loss function to account
+for class imbalances.
+Another suggestion would be to try out popular preconstructed CNN architectures.
